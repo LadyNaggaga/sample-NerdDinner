@@ -124,6 +124,7 @@
             title: "",
             description: "",
             eventDate: "",
+            eventTime: "",
             address: "",
             contactPhone: ""
         }, $scope.today = function() {
@@ -133,13 +134,30 @@
         }, $scope.toggleMin = function() {
             $scope.minDate = $scope.minDate ? null : new Date();
         }, $scope.toggleMin(), $scope.open = function($event) {
-            $event.preventDefault(), $event.stopPropagation(), $scope.opened = !0;
+            $event.preventDefault(), $event.stopPropagation(), $event.popup.opened = !0;
         }, $scope.dateOptions = {
             formatYear: "yy",
             startingDay: 1
-        }, $scope.formats = [ "dd-MMMM-yyyy", "yyyy/MM/dd", "dd.MM.yyyy", "shortDate" ], 
-        $scope.format = $scope.formats[0], "False" == isUserAuthenticated.success && $location.path("/account/login"), 
-        $scope.loadDefaultMap = function() {
+        }, $scope.formats = [ "dd-MMMM-yyyy hh:mm:ss", "yyyy/MM/dd", "dd.MM.yyyy", "shortDate" ], 
+        $scope.format = $scope.formats[0], $scope.altInputFormats = [ "M!/d!/yyyy" ], $scope.popup = {
+            opened: !1
+        };
+        var tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        var afterTomorrow = new Date();
+        afterTomorrow.setDate(tomorrow.getDate() + 2), $scope.events = [ {
+            date: tomorrow,
+            status: "full"
+        }, {
+            date: afterTomorrow,
+            status: "partially"
+        } ], $scope.getDinnerDay = function(date, mode) {
+            if ("day" === mode) for (var checkDay = new Date(date).setHours(0, 0, 0, 0), i = 0; i < $scope.events.length; i++) {
+                var currentDay = new Date($scope.events[i].date).setHours(0, 0, 0, 0);
+                if (checkDay === currentDay) return $scope.events[i].status;
+            }
+            return "";
+        }, "False" == isUserAuthenticated.success && $location.path("/account/login"), $scope.loadDefaultMap = function() {
             mapService.loadDefaultMap();
         }, $scope.changeAddress = function(address) {
             mapService.findAddress(address, !0);

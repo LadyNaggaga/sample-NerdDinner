@@ -139,8 +139,7 @@
         $scope.open = function($event) {
             $event.preventDefault();
             $event.stopPropagation();
-
-            $scope.status.opened = true;
+            $event.popup.opened = true;
         };
 
         $scope.dateOptions = {
@@ -150,7 +149,11 @@
 
         $scope.formats = ['dd-MMMM-yyyy hh:mm:ss', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate']
         $scope.format = $scope.formats[0];
+        $scope.altInputFormats = ['M!/d!/yyyy'];
 
+        $scope.popup = {
+            opened: false
+        };
         var tomorrow = new Date();
         tomorrow.setDate(tomorrow.getDate() + 1);
         var afterTomorrow = new Date();

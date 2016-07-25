@@ -18,7 +18,19 @@
                     <input type="text" class="form-control" id="title" ng-model="dinner.title" placeholder="Dinner Title" />
                 </div>
                 <div class="form-group">
-                    <input type="datetime" class="form-control" id="eventDate" ng-model="dinner.eventDate" placeholder="Event Date" />
+                    
+                    <p class="input-group">
+                        <input type="text" class="form-control" uib-datepicker-popup="MM-dd-yyyy"
+                               ng-model="dinner.eventDate" is-open="popup.opened" min-date="minDate" datepicker-options="dateOptions"
+                               close-text="Close" alt-input-formats="altInputFormats" />
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-default" ng-click="open($event)">
+                                <i class="glyphicon glyphicon-calendar"></i>
+                            </button>
+                        </span>
+                    </p>
+                    
+                    <timepicker ng-model="dinner.eventDate" hour-step="hstep" minute-step="mstep" show-meridian="true"></timepicker>
                 </div>
                 <div class="form-group">
                     <input type="text" class="form-control" id="description" ng-model="dinner.description" placeholder="Description" />

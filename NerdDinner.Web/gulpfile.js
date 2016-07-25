@@ -1,5 +1,4 @@
-﻿/// <binding Clean='clean' />
-
+/// <binding Clean='clean' ProjectOpened='watch' />
 var gulp = require("gulp"),
   rimraf = require("rimraf"),
   fs = require("fs"),
