@@ -26,7 +26,7 @@ namespace NerdDinner.Web
 
             if (env.IsDevelopment())
             {
-                //Add user secrets for more information please check out 
+                //Add user secrets for more information please check out https://docs.asp.net/en/latest/security/app-secrets.html?highlight=user%20secrets
                 builder.AddUserSecrets();
                 // This will push telemetry data through Application Insights pipeline faster, allowing you to view results immediately.
                 builder.AddApplicationInsightsSettings(developerMode: true);
