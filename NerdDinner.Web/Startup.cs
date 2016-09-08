@@ -7,7 +7,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using NerdDinner.Web;
 using NerdDinner.Web.Models;
 using NerdDinner.Web.Persistence;
 using System;
@@ -22,10 +21,13 @@ namespace NerdDinner.Web
                .SetBasePath(env.ContentRootPath)
                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
+               .AddJsonFile($"secrets.json", optional: true)
                .AddEnvironmentVariables();
 
             if (env.IsDevelopment())
             {
+                //Add user secrets for more information please check out 
+                builder.AddUserSecrets();
                 // This will push telemetry data through Application Insights pipeline faster, allowing you to view results immediately.
                 builder.AddApplicationInsightsSettings(developerMode: true);
             }
@@ -44,9 +46,11 @@ namespace NerdDinner.Web
             services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
 
             services.AddEntityFrameworkSqlite().AddDbContext<NerdDinnerDbContext>(options => {
-                    var connStringBuilder = new SqliteConnectionStringBuilder() {           DataSource = "./dinners.db"
-                    };
-                    options.UseSqlite(connStringBuilder.ToString());
+                var connStringBuilder = new SqliteConnectionStringBuilder()
+                {
+                    DataSource = "./dinners.db"
+                };
+                options.UseSqlite(connStringBuilder.ToString());
             });
 
             services.AddTransient<INerdDinnerRepository, NerdDinnerRepository>();
@@ -55,7 +59,7 @@ namespace NerdDinner.Web
             services.AddIdentity<ApplicationUser, IdentityRole>(options =>
             {
                 options.Cookies.ApplicationCookie.AccessDeniedPath = "/Home/AccessDenied";
-                
+
             })
                     .AddEntityFrameworkStores<NerdDinnerDbContext>()
                     .AddDefaultTokenProviders();
@@ -77,15 +81,15 @@ namespace NerdDinner.Web
             // Add memory cache services
             if (HostingEnvironment.IsProduction())
             {
-              services.AddMemoryCache();
-              services.AddDistributedMemoryCache();
+                services.AddMemoryCache();
+                services.AddDistributedMemoryCache();
             }
 
             // Add session related services.
             // TODO: Test Session timeout
             services.AddSession(options =>
             {
-               // options.CookieName = ".AdventureWorks.Session";
+                // options.CookieName = ".AdventureWorks.Session";
                 options.IdleTimeout = TimeSpan.FromSeconds(10);
             });
 
@@ -102,7 +106,7 @@ namespace NerdDinner.Web
                         authBuilder.RequireClaim("ManageDinner", "Allowed");
                     });
             });
-        }      
+        }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
@@ -131,35 +135,35 @@ namespace NerdDinner.Web
             app.UseFacebookAuthentication(new FacebookOptions
             {
                 //TODO: HideKeys all authentications
-                AppId = "5609270052582677",
-                AppSecret = "3d9a853452f18ca5e928e96602307525"
+                AppId = "Authentication:Facebook:AppId",
+                AppSecret = "Authentication:Facebook:AppSecret"
             });
 
             app.UseGoogleAuthentication(new GoogleOptions
             {
-                ClientId = "500918194801-v85iqffirr06ge97e5i901j1j455k9lp.apps.googleusercontent.com",
-                ClientSecret = "5nvZDaPvNtoCqukUbuo2qEOF"
+                ClientId = "Authentication:Google:ClientId",
+                ClientSecret = "Authentication:Google:ClientSecret"
             });
 
             app.UseTwitterAuthentication(new TwitterOptions
             {
-                ConsumerKey = "lDSPIu480ocnXYZ9DumGCDw37",
-                ConsumerSecret = "fpo0oWRNc3vsZKlZSq1PyOSoeXlJd7NnG4Rfc94xbFXsdcc3nH"
+                ConsumerKey = "Authentication:Twitter:ConsumerKey",
+                ConsumerSecret = "Authentication:Twitter:ConsumerSecret"
             });
 
             app.UseMicrosoftAccountAuthentication(new MicrosoftAccountOptions
             {
                 DisplayName = "MicrosoftAccount - Requires project changes",
-                ClientId = "000000004012C08A",
-                ClientSecret = "GaMQ2hCnqAC6EcDLnXsAeBVIJOLmeutL"
+                ClientId = "Authentication:Microsoft:ClientId",
+                ClientSecret = "Authentication:Microsoft:ClientSecret"
             });
 
             // Add MVC to the request pipeline
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
-                    name:"redirectjsdinner",
-                    template:"dinners/{*pathInfo}",
+                    name: "redirectjsdinner",
+                    template: "dinners/{*pathInfo}",
                     defaults: new { controller = "Home", action = "Index" }
                     );
                 routes.MapRoute(
