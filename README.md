@@ -37,7 +37,7 @@ Download .NET Core for Windows, Linux, Mac for more options please visit the [do
  Ready to go sample
 ----------------------
  
-1. NerdDinner 1.0 is [ASP.NET Core 1.0](https://docs.asp.net/en/latest/getting-started.html) application and will run on Windows, Linux,and Mac.
+1. NerdDinner 1.0 is [ASP.NET Core](https://docs.asp.net/en/latest/getting-started.html) application and will run on Windows, Linux,and Mac.
 
 2.  This sample uses [SQLite](https://ef.readthedocs.io/en/latest/platforms/netcore/new-db-sqlite.html) backend.  
     - Notice that when you run the application `dotnet run`  the SQLite database is built 
