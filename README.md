@@ -32,7 +32,7 @@ Download .NET Core for Windows, Linux, Mac for more options please visit the [do
 ![dotnetrunlocalhost](https://cloud.githubusercontent.com/assets/2546640/17595124/ce408646-5fb9-11e6-9939-2248c9fdf3cd.gif)
  4. Navigate to` localhost:5000 `
 
-![newnerddinner](https://cloud.githubusercontent.com/assets/2546640/20034499/164d9ac6-a396-11e6-817d-3b270ddc684f.PNG)
+![newnerddinner](https://cloud.githubusercontent.com/assets/2546640/23884138/5aa5e6aa-0841-11e7-8f60-cadadb7954e3.PNG)
 
  Ready to go sample
 ----------------------
