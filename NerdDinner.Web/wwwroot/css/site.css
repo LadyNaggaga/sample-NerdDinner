@@ -1,8 +1,7 @@
 body {
-  /*background: #f7f4e6 url('/images/bkg.jpg') repeat-x top left !important;*/
+
   background: #FFFFFF;
   font-family: Open Sans, sans-serif;
-  /*font-family:  arial, helvetica, clean, sans-serif;*/
   font-size: 13px;
   font-style: normal;
   font-variant: normal;
@@ -139,8 +138,9 @@ p {
   border-top: solid 3px transparent;
 }
 .navbar ul.nav > li > a:hover {
-  border-top: solid 3px #;
+  border-top: solid 3px ;
 }
+
 @media (max-width: 767px) {
   .navbar ul.nav > li > a:hover {
     border-top: solid 3px transparent;
