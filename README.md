@@ -18,7 +18,7 @@ Download .NET Core for Windows, Linux, Mac for more options please visit the [do
     git clone https://github.com/aspnet/sample-NerdDinner.git
 ```
 
- 2. Navigate to your local copy of the sample-NerdDinner and, restore the packages specified in the project.json file.
+ 2. Navigate to your local copy of the sample-NerdDinner and, restore the packages.
  
  ```sh
     cd sample-NerdDinner
