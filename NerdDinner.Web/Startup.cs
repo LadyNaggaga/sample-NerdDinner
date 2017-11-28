@@ -155,9 +155,6 @@ namespace NerdDinner.Web
                      defaults: new { controller = "Home", action = "Index" });
 
             });
-
-            //Populate dinner sample data
-            SampleData.InitializeNerdDinner(app.ApplicationServices).Wait();
         }
     }
 }

@@ -15,7 +15,7 @@ namespace NerdDinner.Web.Models
             using (var serviceScope = provider.GetRequiredService<IServiceScopeFactory>().CreateScope())
             {
                 var db = serviceScope.ServiceProvider.GetService<NerdDinnerDbContext>();
-                UserManager<ApplicationUser> userManager = provider.GetService<UserManager<ApplicationUser>>();
+                UserManager<ApplicationUser> userManager = serviceScope.ServiceProvider.GetService<UserManager<ApplicationUser>>();
 
                 INerdDinnerRepository repository = new NerdDinnerRepository(db);
 
@@ -26,12 +26,12 @@ namespace NerdDinner.Web.Models
                     var applicationUser = new ApplicationUser
                     {
                         UserName = user.Email
-                    };
+                    }; 
 
                     await userManager.CreateAsync(applicationUser, user.Password);
                 }
 
-                
+
                 if (repository.Dinners.Count() == 0)
                 {
                   var newDinners = GetDinners();
