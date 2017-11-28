@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Configuration;
 using System;
 using Microsoft.Extensions.Logging;
 using NerdDinner.Web.Models;
@@ -34,6 +35,16 @@ namespace NerdDinner.Web
 
         public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
+                .ConfigureAppConfiguration((ctx, config) =>
+                {
+                    var env = ctx.HostingEnvironment;
+                    if (env.IsDevelopment())
+                    {
+                        config.AddUserSecrets<Program>();
+                        // This will push telemetry data through Application Insights pipeline faster, allowing you to view results immediately.
+                        config.AddApplicationInsightsSettings(developerMode: true);
+                    }
+                })
                 .UseStartup<Startup>()
                 .Build();
     }
