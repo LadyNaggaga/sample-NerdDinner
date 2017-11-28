@@ -11,6 +11,7 @@ using NerdDinner.Web;
 using NerdDinner.Web.Models;
 using NerdDinner.Web.Persistence;
 using System;
+using Microsoft.AspNetCore.Identity;
 
 namespace NerdDinner.Web
 {
@@ -43,30 +44,42 @@ namespace NerdDinner.Web
         {
             services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
 
-            services.AddEntityFrameworkSqlite().AddDbContext<NerdDinnerDbContext>(options => {
-                    var connStringBuilder = new SqliteConnectionStringBuilder() {           DataSource = "./dinners.db"
-                    };
-                    options.UseSqlite(connStringBuilder.ToString());
+            services.AddEntityFrameworkSqlite().AddDbContext<NerdDinnerDbContext>(options =>
+            {
+                var connStringBuilder = new SqliteConnectionStringBuilder()
+                {
+                    DataSource = "./dinners.db"
+                };
+                options.UseSqlite(connStringBuilder.ToString());
             });
 
             services.AddTransient<INerdDinnerRepository, NerdDinnerRepository>();
 
-            // Add Identity services to the services container
-            services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+            services.ConfigureApplicationCookie(options =>
             {
-                options.Cookies.ApplicationCookie.AccessDeniedPath = "/Home/AccessDenied";
-                
-            })
+                options.AccessDeniedPath = "/Home/AccessDenied";
+            });
+
+            // Add Identity services to the services container
+            services.AddIdentity<ApplicationUser, IdentityRole>()
                     .AddEntityFrameworkStores<NerdDinnerDbContext>()
                     .AddDefaultTokenProviders();
 
-
-            services.AddCors(options =>
+            services.AddAuthentication()
+            .AddGoogle(options =>
             {
-                options.AddPolicy("CorsPolicy", builder =>
-                {
-                    builder.WithOrigins("http://example.com");
-                });
+                options.ClientId = "500918194801-v85iqffirr06ge97e5i901j1j455k9lp.apps.googleusercontent.com";
+                options.ClientSecret = "5nvZDaPvNtoCqukUbuo2qEOF";
+            })
+            .AddMicrosoftAccount(options =>
+            {
+                options.ClientId = "000000004012C08A";
+                options.ClientSecret = "GaMQ2hCnqAC6EcDLnXsAeBVIJOLmeutL";
+            })
+            .AddTwitter(options =>
+            {
+                options.ConsumerKey = "lDSPIu480ocnXYZ9DumGCDw37";
+                options.ConsumerSecret = "fpo0oWRNc3vsZKlZSq1PyOSoeXlJd7NnG4Rfc94xbFXsdcc3nH";
             });
 
             services.AddLogging();
@@ -77,15 +90,15 @@ namespace NerdDinner.Web
             // Add memory cache services
             if (HostingEnvironment.IsProduction())
             {
-              services.AddMemoryCache();
-              services.AddDistributedMemoryCache();
+                services.AddMemoryCache();
+                services.AddDistributedMemoryCache();
             }
 
             // Add session related services.
             // TODO: Test Session timeout
             services.AddSession(options =>
             {
-               // options.CookieName = ".AdventureWorks.Session";
+                // options.CookieName = ".AdventureWorks.Session";
                 options.IdleTimeout = TimeSpan.FromSeconds(10);
             });
 
@@ -95,14 +108,12 @@ namespace NerdDinner.Web
             // Configure Auth
             services.AddAuthorization(options =>
             {
-                options.AddPolicy(
-                    "ManageDinner",
-                    authBuilder =>
-                    {
-                        authBuilder.RequireClaim("ManageDinner", "Allowed");
-                    });
+                options.AddPolicy("ManageDinner", authBuilder =>
+                   {
+                       authBuilder.RequireClaim("ManageDinner", "Allowed");
+                   });
             });
-        }      
+        }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
@@ -118,6 +129,7 @@ namespace NerdDinner.Web
             {
                 app.UseExceptionHandler("/Home/Error");
             }
+
             // Configure Session.
             app.UseSession();
 
@@ -125,43 +137,18 @@ namespace NerdDinner.Web
             app.UseStaticFiles();
 
             // Add cookie-based authentication to the request pipeline
-            app.UseIdentity();
-            //The following lines starting with app.UseThirdPartyAuthenicaiton enable logging in 
-            //with login providers https://docs.asp.net/en/latest/security/authentication/sociallogins.html
-            //app.UseFacebookAuthentication(new FacebookOptions
-            //{
-            //    //TODO: HideKeys all authentications
-            //    AppId = "5609270052582677",
-            //    AppSecret = "3d9a853452f18ca5e928e96602307525"
-            //});
+            app.UseAuthentication();
 
-            app.UseGoogleAuthentication(new GoogleOptions
-            {
-                ClientId = "500918194801-v85iqffirr06ge97e5i901j1j455k9lp.apps.googleusercontent.com",
-                ClientSecret = "5nvZDaPvNtoCqukUbuo2qEOF"
-            });
-
-            app.UseTwitterAuthentication(new TwitterOptions
-            {
-                ConsumerKey = "lDSPIu480ocnXYZ9DumGCDw37",
-                ConsumerSecret = "fpo0oWRNc3vsZKlZSq1PyOSoeXlJd7NnG4Rfc94xbFXsdcc3nH"
-            });
-
-            app.UseMicrosoftAccountAuthentication(new MicrosoftAccountOptions
-            {
-                DisplayName = "MicrosoftAccount - Requires project changes",
-                ClientId = "000000004012C08A",
-                ClientSecret = "GaMQ2hCnqAC6EcDLnXsAeBVIJOLmeutL"
-            });
 
             // Add MVC to the request pipeline
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
-                    name:"redirectjsdinner",
-                    template:"dinners/{*pathInfo}",
+                    name: "redirectjsdinner",
+                    template: "dinners/{*pathInfo}",
                     defaults: new { controller = "Home", action = "Index" }
                     );
+
                 routes.MapRoute(
                      name: "default",
                      template: "{controller}/{action}/{id?}",

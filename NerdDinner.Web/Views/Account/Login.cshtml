@@ -2,7 +2,7 @@
 @using System.Collections.Generic
 @using Microsoft.AspNetCore.Identity
 @using NerdDinner.Web.Models
-@using Microsoft.AspNetCore.Http.Authentication
+@using Microsoft.AspNetCore.Authentication
 @inject SignInManager<ApplicationUser> SignInManager
 
 @{
@@ -46,7 +46,7 @@
             <section id="socialLoginForm">
                 <h4>Use another service to log in</h4>
                 @{
-                    var LoginProviders = SignInManager.GetExternalAuthenticationSchemes().ToList();
+                    var LoginProviders = (await SignInManager.GetExternalAuthenticationSchemesAsync()).ToList();
                     if (LoginProviders.Count == 0)
                     {
                         <div>
@@ -62,9 +62,9 @@
 
                             <div id="socialLoginList">
                                 <p>
-                                    @foreach (AuthenticationDescription p in LoginProviders)
+                                    @foreach (AuthenticationScheme p in LoginProviders)
                                     {
-                                        <button type="submit" class="btn btn-default" id="@p.AuthenticationScheme" name="provider" value="@p.AuthenticationScheme" title="Log in using your @p.DisplayName account">@p.AuthenticationScheme</button>
+                                        <button type="submit" class="btn btn-default" id="@p.Name" name="provider" value="@p.Name" title="Log in using your @p.DisplayName account">@p.Name</button>
                                     }
                                 </p>
                             </div>
