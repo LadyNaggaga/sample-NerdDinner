@@ -66,10 +66,11 @@ namespace NerdDinner.Web
                 options.ConsumerSecret = "fpo0oWRNc3vsZKlZSq1PyOSoeXlJd7NnG4Rfc94xbFXsdcc3nH";
             });
 
-            services.AddLogging();
-
             // Add MVC services to the services container
-            services.AddMvc();
+            services.AddMvc()
+                .AddRazorPagesOptions(opts => {
+                    opts.Conventions.AddPageRoute("/Index","dinners/{*pathInfo}");
+                });
 
             // Add memory cache services
             if (HostingEnvironment.IsProduction())
@@ -101,10 +102,7 @@ namespace NerdDinner.Web
 
         public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory)
         {
-            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-            loggerFactory.AddDebug();
-
-            if (HostingEnvironment.IsDevelopment())
+             if (HostingEnvironment.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
                 app.UseBrowserLink();
@@ -123,22 +121,8 @@ namespace NerdDinner.Web
             // Add cookie-based authentication to the request pipeline
             app.UseAuthentication();
 
-
             // Add MVC to the request pipeline
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute(
-                    name: "redirectjsdinner",
-                    template: "dinners/{*pathInfo}",
-                    defaults: new { controller = "Home", action = "Index" }
-                    );
-
-                routes.MapRoute(
-                     name: "default",
-                     template: "{controller}/{action}/{id?}",
-                     defaults: new { controller = "Home", action = "Index" });
-
-            });
+            app.UseMvc();
         }
     }
 }
