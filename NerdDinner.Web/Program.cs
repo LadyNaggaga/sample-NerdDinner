@@ -6,6 +6,9 @@ using Microsoft.Extensions.Configuration;
 using System;
 using Microsoft.Extensions.Logging;
 using NerdDinner.Web.Models;
+using Microsoft.Extensions.Configuration.UserSecrets;
+
+[assembly: UserSecretsId("nerd-dinner-8f56-55188f768881")]
 
 namespace NerdDinner.Web
 {
