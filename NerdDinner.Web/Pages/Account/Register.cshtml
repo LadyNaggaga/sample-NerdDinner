@@ -1,4 +1,5 @@
-﻿@model NerdDinner.Web.Models.RegisterViewModel
+﻿@page
+@model RegisterViewModel
 @{
     ViewBag.Title = "Register";
 }
@@ -11,7 +12,7 @@
     </div>
     <div class="row">
         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 bordered">
-            <form asp-controller="Account" asp-action="Register" method="post" class="form-horizontal" role="form">
+            <form method="post" class="form-horizontal" role="form">
                 <h4>Create a new account</h4>
                 <div asp-validation-summary="All" class="text-danger"></div>
                 <div class="form-group">
@@ -35,7 +36,7 @@
                 <div class="form-group">
                     <div class="col-lg-11 col-md-11 col-sm-11 col-xs-11">
                         <input type="submit" value="Register" class="btn btn-default" />
-                        <span class="login-display">or <a class="link" asp-action="login">Log On</a></span>
+                        <span class="login-display">or <a class="link" href="/account/login">Log On</a></span>
                     </div>
                 </div>
             </form>
@@ -45,5 +46,5 @@
 
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
 }

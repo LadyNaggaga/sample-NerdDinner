@@ -1,7 +1,7 @@
-﻿@model NerdDinner.Web.Models.LoginViewModel
+﻿@page
+@model LoginModel
 @using System.Collections.Generic
 @using Microsoft.AspNetCore.Identity
-@using NerdDinner.Web.Models
 @using Microsoft.AspNetCore.Authentication
 @inject SignInManager<ApplicationUser> SignInManager
 
@@ -18,25 +18,25 @@
     <div class="row">
         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 bordered">
             <section id="loginForm">
-                <form asp-controller="Account" asp-action="Login" asp-route-returnurl="@ViewBag.ReturnUrl" method="post" class="form-horizontal" role="form">
+                <form asp-route-returnurl="@ViewBag.ReturnUrl" method="post" class="form-horizontal" role="form">
                     <h4>using a Nerd Dinner account</h4>
                     <div asp-validation-summary="All" class="text-danger"></div>
                     <div class="form-group">
                         <div class="col-lg-11 col-md-11 col-sm-11 col-xs-11">
-                            <input asp-for="Email" class="form-control" placeholder="Enter Email" />
-                            <span asp-validation-for="Email" class="text-danger"></span>
+                            <input asp-for="Input.Email" class="form-control" placeholder="Enter Email" />
+                            <span asp-validation-for="Input.Email" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="col-lg-11 col-md-11 col-sm-11 col-xs-11">
-                            <input asp-for="Password" class="form-control" placeholder="Enter Password" />
-                            <span asp-validation-for="Password" class="text-danger"></span>
+                            <input asp-for="Input.Password" class="form-control" placeholder="Enter Password" />
+                            <span asp-validation-for="Input.Password" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="col-lg-11 col-md-11 col-sm-11 col-xs-11">
                             <input type="submit" value="Log On" class="btn btn-default" />
-                            <span class="login-display">or <a class="link" asp-action="register">Register</a></span>
+                            <span class="login-display">or <a class="link" href="/account/register" >Register</a></span>
                         </div>
                     </div>
                 </form>
@@ -46,8 +46,8 @@
             <section id="socialLoginForm">
                 <h4>Use another service to log in</h4>
                 @{
-                    var LoginProviders = (await SignInManager.GetExternalAuthenticationSchemesAsync()).ToList();
-                    if (LoginProviders.Count == 0)
+
+                    if (Model.ExternalLogins.Count == 0)
                     {
                         <div>
                             <p>
@@ -58,11 +58,11 @@
                     }
                     else
                     {
-                        <form asp-controller="Account" asp-action="ExternalLogin" asp-route-returnurl="@ViewBag.ReturnUrl" method="post" class="form-horizontal" role="form">
+                        <form action="/account/externalLogin"  method="post" class="form-horizontal" role="form">
 
                             <div id="socialLoginList">
                                 <p>
-                                    @foreach (AuthenticationScheme p in LoginProviders)
+                                    @foreach (AuthenticationScheme p in Model.ExternalLogins)
                                     {
                                         <button type="submit" class="btn btn-default" id="@p.Name" name="provider" value="@p.Name" title="Log in using your @p.DisplayName account">@p.Name</button>
                                     }

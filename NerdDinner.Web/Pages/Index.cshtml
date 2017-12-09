@@ -1,0 +1,71 @@
+﻿@page
+@{
+    ViewBag.Title = "Nerd Dinner - Home";
+}
+
+<link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.css" />
+<link rel="stylesheet" href="~/lib/bootstrap-touch-carousel/css/bootstrap-touch-carousel.css" />
+<link rel="stylesheet" href="~/css/site.css" />
+
+
+<div class="container-fluid">
+    <nav class="navbar navbar-full navbar-fixed-top">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/"> NERD DINNER</a>
+        </div>
+        <div class="navbar-collapse collapse" id="navigation">
+            <ul class="nav navbar-nav navbar-right">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Find Dinner</a>
+                </li>
+                @if (User.Identity.IsAuthenticated)
+                {
+                <li>
+                    <a class="nav-link" href="/dinners/add">Host Dinner</a>
+                </li>
+                <li>
+                    <a class="nav-link" href="/dinners/my">My Dinners</a>
+                </li>
+                }
+                else
+                 {
+                <li>
+                    <a class="nav-link" href="/account/login">Host Dinner</a>
+                </li>
+                }
+                @*
+                <li>
+                    <a class="nav-link" href="/about">About</a>
+                </li>*@
+                <li>
+                    <a href="#about">About us</a>
+                </li>
+
+                @await Html.PartialAsync("_LoginPartial")
+
+            </ul>
+
+        </div>
+    </nav>
+</div>
+
+
+<div class="container main-body">
+    <ng-view></ng-view>
+</div>
+
+@section scripts
+{
+    <script src="~/lib/angular/angular.js"></script>
+    <script src="~/lib/angular-resource/angular-resource.js"></script>
+    <script src="~/lib/angular-route/angular-route.js"></script>
+    <script src="~/lib/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+    <script src="@Url.Content(" /app.js ")" type="text/javascript"></script>
+    <script type="text/javascript" src="http://ecn.dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=7.0"></script>
+}
