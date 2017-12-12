@@ -47,7 +47,7 @@
                 <h4>Use another service to log in</h4>
                 @{
 
-                    if (Model.ExternalLogins.Count == 0)
+                    if ((Model.ExternalLogins?.Count ?? 0) == 0)
                     {
                         <div>
                             <p>
@@ -58,19 +58,20 @@
                     }
                     else
                     {
-                        <form action="/account/externalLogin"  method="post" class="form-horizontal" role="form">
+                         <form asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal" role="form">
 
                             <div id="socialLoginList">
                                 <p>
                                     @foreach (AuthenticationScheme p in Model.ExternalLogins)
                                     {
-                                        <button type="submit" class="btn btn-default" id="@p.Name" name="provider" value="@p.Name" title="Log in using your @p.DisplayName account">@p.Name</button>
+                                        <button type="submit" class="btn btn-default" name="provider" value="@p.Name" title="Log in using your @p.DisplayName account">@p.DisplayName</button>
                                     }
                                 </p>
                             </div>
                         </form>
                     }
                 }
+
             </section>
         </div>
 

@@ -14,6 +14,7 @@ namespace NerdDinner.Web.Pages.Account
 {
     public class LoginModel : PageModel
     {
+        [BindProperty]
         public LoginViewModel Input { get; set; }
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly ILogger<LoginModel> _logger;
@@ -56,10 +57,7 @@ namespace NerdDinner.Web.Pages.Account
                     _logger.LogInformation("User logged in.");
                     return LocalRedirect(Url.GetLocalUrl(returnUrl));
                 }
-                if (result.RequiresTwoFactor)
-                {
-                    return RedirectToPage("./LoginWith2fa", new { ReturnUrl = returnUrl, RememberMe = Input.RememberMe });
-                }
+                ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
                 if (result.IsLockedOut)
                 {
                     _logger.LogWarning("User account locked out.");

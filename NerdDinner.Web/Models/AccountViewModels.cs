@@ -9,6 +9,13 @@ namespace NerdDinner.Web.Models
         public string Email { get; set; }
     }
 
+public class ExternalLoginViewModel
+        {
+            [Required]
+            [EmailAddress]
+            public string Email { get; set; }
+        }
+
     public class LoginViewModel
     {
         [Required]

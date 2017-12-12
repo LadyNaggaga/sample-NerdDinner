@@ -25,7 +25,7 @@ namespace NerdDinner.Web.Persistence
             return await _database.Dinners
                 .Include(d => d.Rsvps)
                 .SingleOrDefaultAsync(d => d.DinnerId == dinnerId);
-        }        
+        }
 
         public virtual async Task<List<Dinner>> GetDinnersAsync(DateTime? startDate, DateTime? endDate, string userName, string searchQuery, string sort, bool descending, double? lat, double? lng, int? pageIndex, int? pageSize)
         {
@@ -81,7 +81,7 @@ namespace NerdDinner.Web.Persistence
         {
             return await _database.Dinners
                 .Include(d => d.Rsvps)
-                .OrderByDescending(d => d.Rsvps.Count)
+                .OrderByDescending(d => d.Rsvps.Sum(x =>1))
                 .Take(8)
                 .ToListAsync();
         }
