@@ -41,7 +41,7 @@ namespace NerdDinner.Web
 
             services.ConfigureApplicationCookie(options =>
             {
-                options.AccessDeniedPath = "/Home/AccessDenied";
+                options.AccessDeniedPath = "/AccessDenied";
             });
 
             // Add Identity services to the services container
@@ -79,25 +79,8 @@ namespace NerdDinner.Web
                 services.AddDistributedMemoryCache();
             }
 
-            // Add session related services.
-            // TODO: Test Session timeout
-            services.AddSession(options =>
-            {
-                // options.CookieName = ".AdventureWorks.Session";
-                options.IdleTimeout = TimeSpan.FromSeconds(10);
-            });
-
             // Add the system clock service
             services.AddSingleton<ISystemClock, SystemClock>();
-
-            // Configure Auth
-            services.AddAuthorization(options =>
-            {
-                options.AddPolicy("ManageDinner", authBuilder =>
-                   {
-                       authBuilder.RequireClaim("ManageDinner", "Allowed");
-                   });
-            });
         }
 
         public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory)
@@ -111,9 +94,6 @@ namespace NerdDinner.Web
             {
                 app.UseExceptionHandler("/Home/Error");
             }
-
-            // Configure Session.
-            app.UseSession();
 
             // Add static files to the request pipeline
             app.UseStaticFiles();
